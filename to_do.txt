@@ -1,0 +1,57 @@
+
+
+1-
+Sua API deverá ter um endpoint onde o usuário consiga fazer a operação de adição de novos registros.
+Um registro é uma transação monetária, e deverá ter como campos no mínimo: um identificador, a data e hora da transação, o modo como foi feita, uma categoria, uma nota de observação, um valor, e o tipo da transação.
+O identificador deverá ser gerado quando a API aceitar a transação como válida e armazenar a mesma.
+O campo “data e hora de transação” deverá aceitar um valor no formato ISO 8601 
+O campo “modo de transação” poderá ser somente os valores “Dinheiro”, “Cartão de Débito”, “Cartão de Crédito”, “Transferência Bancária”.
+Os campos “categoria” e “nota de observação” são campos de textos livres.
+O tipo da transação poderá ser somente os valores “Receita” ou “Despesa”.
+
+2-
+Sua API deverá ter um endpoint onde o usuário poderá fornecer uma lista de identificadores que identificam um conjunto de transações a serem removidas:
+A remoção de uma transação acontece através da criação de registros idênticos, com a diferença de que o tipo da transação deverá ser oposta (correção através de estorno);
+
+3-
+Sua API deverá ter um endpoint onde o usuário poderá fornecer um conjunto de registros contendo seu identificador junto com valores a serem editados:
+A edição de uma transação acontece primeiro fazendo a remoção do mesmo (pela operação de estorno) e então a criação do novo registro (lançamento retificado);
+Deve ser possível identificar quando um registro foi editado, e o registro mais novo deverá armazenar os identificadores dos registros mais antigos;
+
+4-
+Sua API deverá ter endpoints onde o usuário consiga realizar as seguintes operações de busca, listagem e filtragem, exibindo todos os campos da transação que atender a respectiva operação:
+Obter todos os registros de um ano;
+Obter todos os registros de um mês e ano;
+Obter todos os registros de um dia, mês e ano.
+Obter todos os registros com uma categoria de transação;
+Obter todos os registros pelo modo da transação;
+Filtrar apenas registros de entrada, gasto ou ambos;
+Filtrar apenas registros maiores que ou menores que um certo valor;
+Saber se o registro foi removido e apresentar o registro complementar (a transação que faz o estorno do primeiro valor).
+Saber se o registro foi editado, e apresentar os valores dos registros antigos.
+
+5-
+Sua API deverá retornar uma mensagem com o apropriado “status code” quando receber uma requisição:
+Uma mensagem e status code de erro quando ela não conseguir atender a requisição solicitada (exemplos como, dados enviados no formato errado, acesso a endpoints inexistente ou sem permissão, etc);
+Uma mensagem e status code de sucesso quando ela conseguir atender a solicitação. Caso for uma operação de criação, ela deverá também retornar o valor de identificador dos registros que foram criados.
+
+6-
+Para usar os endpoints da sua API o usuário deverá estar autenticado através do uso de uma chave de API que deverá ser passada como valor para um header de nome “X-API-Key” da requisição;
+
+7-
+Sua API deverá aceitar receber valor de corpo das requisições POST somente no formato JSON;
+
+8-
+Todas as respostas da sua API deverão retornar os dados no formato JSON com o header “Content-Type” com o valor  “application/json”.
+
+
+Entregas
+1-
+Documento de especificação da sua API:
+Lista dos endpoints da sua API, contendo o nome do endpoint, o método HTTP, descrição do formato de requisição que aceita e das respostas possíveis que o mesmo pode gerar;
+
+2-
+Código fonte da aplicação da API em uma das linguagens de programação definidas:
+Instrução de como configurar o ambiente de produção da sua aplicação (variáveis de ambiente, banco de dados, diretórios e arquivos, etc);
+Instruções de como compilar/executar o código-fonte da aplicação;
+Pelo menos 20 registros já armazenados no sistema, disponíveis para consulta através de endpoints apropriados.
