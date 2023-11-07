@@ -1,0 +1,9 @@
+
+pip install djangorestframework
+pip install markdown       # Markdown support for the browsable API.
+pip install django-filter  # Filtering support
+
+pip install psycopg2
+pip install django-admin-cli
+
+django-admin startproject transacoes_bancarias
