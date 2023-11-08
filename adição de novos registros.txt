@@ -1,0 +1,24 @@
+adição de novos registros = transação
+JSON
+
+
+transação -> 
+	identificador 
+	data
+	hora
+	modo
+	categoria
+	nota de observação
+	valor
+	tipo
+
+
+endpoint -> 
+	delete(estorno)
+	edit
+	busca
+	listagem 
+	filtragem
+	
+	
+autenticação -> 
