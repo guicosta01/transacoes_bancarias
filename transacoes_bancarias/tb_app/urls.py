@@ -7,4 +7,5 @@ urlpatterns = [
     path('read/<str:pk>', views.getTransacao),
     path('update/<str:pk>', views.updateTransacao),
     path('delete/<str:pk>', views.deleteTransacao),
+    path('remover_transacoes/', views.remover_transacoes),
 ]

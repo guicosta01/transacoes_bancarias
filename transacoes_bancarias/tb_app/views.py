@@ -47,3 +47,37 @@ def deleteTransacao(request, pk):
     transacao.delete()
 
     return Response('Transacao successfully deleted')
+
+
+@api_view(['POST'])
+def remover_transacoes(request):
+    if request.method == 'POST':
+        identificadores = request.data.get('identificadores', [])
+
+        transacoes = Transacao.objects.filter(identificador__in=identificadores)
+
+        if transacoes.exists():
+            for transacao in transacoes:
+                if transacao.tipo_transacao == 'receita':
+                    tipo_estorno = 'despesa'
+                elif transacao.tipo_transacao == 'despesa':
+                    tipo_estorno = 'receita'
+                else:
+                    tipo_estorno = None
+
+                if tipo_estorno:
+                    estorno = Transacao.objects.create(
+                        data_hora_transacao=transacao.data_hora_transacao,
+                        modo_transacao=transacao.modo_transacao,
+                        categoria=transacao.categoria,
+                        nota_observacao=f"Estorno da transação {transacao.identificador}",
+                        valor=-transacao.valor,  # Valor negativo para estorno
+                        tipo_transacao=tipo_estorno
+                    )
+                    estorno.save()
+
+            transacoes.delete()
+
+            return Response({'message': 'Transações removidas e registros de estorno criados com sucesso.'}, status=200)
+        else:
+            return Response({'message': 'Nenhuma transação encontrada para remover.'}, status=404)
