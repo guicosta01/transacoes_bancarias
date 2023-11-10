@@ -1,5 +1,5 @@
 
-
+Ok
 1-
 Sua API deverá ter um endpoint onde o usuário consiga fazer a operação de adição de novos registros.
 Um registro é uma transação monetária, e deverá ter como campos no mínimo: um identificador, a data e hora da transação, o modo como foi feita, uma categoria, uma nota de observação, um valor, e o tipo da transação.
@@ -9,10 +9,12 @@ O campo “modo de transação” poderá ser somente os valores “Dinheiro”,
 Os campos “categoria” e “nota de observação” são campos de textos livres.
 O tipo da transação poderá ser somente os valores “Receita” ou “Despesa”.
 
+Ok -> deletar do banco a antiga???
 2-
 Sua API deverá ter um endpoint onde o usuário poderá fornecer uma lista de identificadores que identificam um conjunto de transações a serem removidas:
 A remoção de uma transação acontece através da criação de registros idênticos, com a diferença de que o tipo da transação deverá ser oposta (correção através de estorno);
 
+testar
 3-
 Sua API deverá ter um endpoint onde o usuário poderá fornecer um conjunto de registros contendo seu identificador junto com valores a serem editados:
 A edição de uma transação acontece primeiro fazendo a remoção do mesmo (pela operação de estorno) e então a criação do novo registro (lançamento retificado);
