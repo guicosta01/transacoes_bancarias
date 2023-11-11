@@ -1,8 +1,46 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .models import Transacao
 from .serializers import TransacaoSerializer
 
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserSerializer
+from rest_framework import status
+
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+
+#================================ Token ================================
+@api_view(['POST'])
+def signup(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        user = User.objects.get(username=request.data['username'])
+        user.set_password(request.data['password'])
+        user.save()
+        token = Token.objects.create(user=user)
+        return Response({'token': token.key, 'user': serializer.data})
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def login(request):
+    user = get_object_or_404(User, username=request.data['username'])
+    if not user.check_password(request.data['password']):
+        return Response("missing user", status=status.HTTP_404_NOT_FOUND)
+    token, created = Token.objects.get_or_create(user=user)
+    serializer = UserSerializer(user)
+    return Response({'token': token.key, 'user': serializer.data})
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def test_token(request):
+    return Response("passed for {}".format(request.user.email))
+
+#================================ Token ================================
 
 #get all transacoes
 @api_view(['GET'])
@@ -71,7 +109,7 @@ def remover_transacoes(request):
                         modo_transacao=transacao.modo_transacao,
                         categoria=transacao.categoria,
                         nota_observacao=f"Estorno da transação {transacao.identificador}",
-                        valor=-transacao.valor,  # Valor negativo para estorno
+                        valor=transacao.valor, 
                         tipo_transacao=tipo_estorno
                     )
                     estorno.save()
@@ -89,7 +127,7 @@ def remover_transacoes(request):
 @api_view(['POST'])
 def editarTransacoes(request):
     if request.method == 'POST':
-        registros_editar = request.data.get('registros_editar', [])
+        registros_editar = request.data.get('identificadores', [])
 
         for registro in registros_editar:
             identificador = registro.get('identificador')
@@ -98,21 +136,46 @@ def editarTransacoes(request):
             # Buscar a transação existente pelo identificador
             transacao_existente = Transacao.objects.get(identificador=identificador)
 
-            # Criar uma transação de estorno para a transação existente
-            estorno = Transacao.objects.create(
+            #criar nova transacao
+            transacao_editada = Transacao.objects.create(
                 data_hora_transacao=transacao_existente.data_hora_transacao,
                 modo_transacao=transacao_existente.modo_transacao,
                 categoria=transacao_existente.categoria,
-                nota_observacao=f"Estorno da transação {transacao_existente.identificador}",
-                valor=-transacao_existente.valor,
-                tipo_transacao='estorno'
+                nota_observacao=f"Retificado da transação {transacao_existente.identificador}",
+                valor= novo_valor,  
+                tipo_transacao=transacao_existente.tipo_transacao 
             )
-            estorno.save()
+            transacao_editada.save()
 
-            # Atualizar a transação existente com o novo valor e marcá-la como editada
-            transacao_existente.valor = novo_valor
-            transacao_existente.editada = True
-            transacao_existente.save()
+            #-------------------------------------------------------------
+            #estorno da antiga
+            identificadores = request.data.get('identificadores', [])
+
+            transacoes = Transacao.objects.filter(identificador__in=identificadores)
+
+            if transacoes.exists():
+                for transacao in transacoes:
+                    if transacao.tipo_transacao == 'receita':
+                        tipo_estorno = 'despesa'
+                    elif transacao.tipo_transacao == 'despesa':
+                        tipo_estorno = 'receita'
+                    else:
+                        tipo_estorno = None
+
+                    if tipo_estorno:
+                        estorno = Transacao.objects.create(
+                            data_hora_transacao=transacao.data_hora_transacao,
+                            modo_transacao=transacao.modo_transacao,
+                            categoria=transacao.categoria,
+                            nota_observacao=f"Estorno da transação {transacao.identificador}",
+                            valor=transacao.valor, 
+                            tipo_transacao=tipo_estorno
+                        )
+                        estorno.save()
+
+                #transacoes.delete()
+                #-------------------------------------------------------------
+            
 
         return Response({'message': 'Transações editadas com sucesso.'}, status=200)
     else:

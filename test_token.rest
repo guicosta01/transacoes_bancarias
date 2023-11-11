@@ -1,0 +1,17 @@
+POST http://localhost:8000/transacoes/signup 
+Content-Type: application/json
+
+{ "username": "gui", "password": "Pass1234!", "email": "gui@gmail.com" }
+
+###
+
+POST http://localhost:8000/transacoes/login 
+Content-Type: application/json
+
+{ "username": "gui", "password": "Pass1234!" }
+
+###
+
+GET http://localhost:8000/transacoes/test_token 
+Content-Type: application/json
+Authorization: token 4e58349dc7c312b008938f0aeb74043ed57791be
