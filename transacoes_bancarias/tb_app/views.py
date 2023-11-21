@@ -134,49 +134,50 @@ def editarTransacoes(request):
             novo_valor = registro.get('novo_valor')
 
             # Buscar a transação existente pelo identificador
-            transacao_existente = Transacao.objects.get(identificador=identificador)
+            try:
+                transacao_existente = Transacao.objects.get(identificador=identificador)
 
-            #criar nova transacao
-            transacao_editada = Transacao.objects.create(
-                data_hora_transacao=transacao_existente.data_hora_transacao,
-                modo_transacao=transacao_existente.modo_transacao,
-                categoria=transacao_existente.categoria,
-                nota_observacao=f"Retificado da transação {transacao_existente.identificador}",
-                valor= novo_valor,  
-                tipo_transacao=transacao_existente.tipo_transacao 
-            )
-            transacao_editada.save()
+                # Criar nova transação com o novo valor
+                transacao_editada = Transacao.objects.create(
+                    data_hora_transacao=transacao_existente.data_hora_transacao,
+                    modo_transacao=transacao_existente.modo_transacao,
+                    categoria=transacao_existente.categoria,
+                    nota_observacao=f"Retificado da transação {transacao_existente.identificador}",
+                    valor=novo_valor,
+                    tipo_transacao=transacao_existente.tipo_transacao
+                )
+                transacao_editada.save()
 
-            #-------------------------------------------------------------
-            #estorno da antiga
-            identificadores = request.data.get('identificadores', [])
+                # Estorno da transação antiga
+                if transacao_existente.tipo_transacao == 'receita':
+                    tipo_estorno = 'despesa'
+                elif transacao_existente.tipo_transacao == 'despesa':
+                    tipo_estorno = 'receita'
+                else:
+                    tipo_estorno = None
 
-            transacoes = Transacao.objects.filter(identificador__in=identificadores)
+                if tipo_estorno:
+                    estorno = Transacao.objects.create(
+                        data_hora_transacao=transacao_existente.data_hora_transacao,
+                        modo_transacao=transacao_existente.modo_transacao,
+                        categoria=transacao_existente.categoria,
+                        nota_observacao=f"Estorno da transação {transacao_existente.identificador}",
+                        valor=transacao_existente.valor,
+                        tipo_transacao=tipo_estorno
+                    )
+                    estorno.save()
 
-            if transacoes.exists():
-                for transacao in transacoes:
-                    if transacao.tipo_transacao == 'receita':
-                        tipo_estorno = 'despesa'
-                    elif transacao.tipo_transacao == 'despesa':
-                        tipo_estorno = 'receita'
-                    else:
-                        tipo_estorno = None
+                # Atualizar a transação editada com a referência da transação anterior
+                #transacao_editada.transacao_anterior = transacao_existente
+                #transacao_editada.save()
 
-                    if tipo_estorno:
-                        estorno = Transacao.objects.create(
-                            data_hora_transacao=transacao.data_hora_transacao,
-                            modo_transacao=transacao.modo_transacao,
-                            categoria=transacao.categoria,
-                            nota_observacao=f"Estorno da transação {transacao.identificador}",
-                            valor=transacao.valor, 
-                            tipo_transacao=tipo_estorno
-                        )
-                        estorno.save()
+                # Remover a transação antiga
+                #transacao_existente.delete()
 
-                #transacoes.delete()
-                #-------------------------------------------------------------
-            
+            except Transacao.DoesNotExist:
+                return Response({'message': f'Transação com identificador {identificador} não encontrada.'}, status=404)
 
         return Response({'message': 'Transações editadas com sucesso.'}, status=200)
     else:
         return Response({'message': 'Método não permitido.'}, status=405)
+
