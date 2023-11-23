@@ -25,7 +25,9 @@ Sua API deverá ter endpoints onde o usuário consiga realizar as seguintes oper
 Obter todos os registros de um ano;
 http://localhost:8000/transacoes/list/?ano=2022
 Obter todos os registros de um mês e ano;
+http://localhost:8000/transacoes/list/?ano=2023&mes=11
 Obter todos os registros de um dia, mês e ano.
+http://localhost:8000/transacoes/list/?ano=2023&mes=11&dia=21
 Obter todos os registros com uma categoria de transação;
 Obter todos os registros pelo modo da transação;
 Filtrar apenas registros de entrada, gasto ou ambos;
