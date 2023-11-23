@@ -13,3 +13,6 @@ django-admin startproject transacoes_bancarias
 docker compose up -d db (test db)
 
 docker compose up 
+
+
+docker compose build tb_app

@@ -12,6 +12,11 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
+from rest_framework import generics
+from .filters import TransacaoFilter
+import django_filters
+
+
 #================================ Token ================================
 @api_view(['POST'])
 def signup(request):
@@ -41,6 +46,18 @@ def test_token(request):
     return Response("passed for {}".format(request.user.email))
 
 #================================ Token ================================
+
+#================================ Filters ================================
+
+class TransacaoList(generics.ListAPIView):
+    queryset = Transacao.objects.all()
+    serializer_class = TransacaoSerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_class = TransacaoFilter
+
+
+#================================ Filters ================================
+
 
 #get all transacoes
 @api_view(['GET'])

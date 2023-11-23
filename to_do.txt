@@ -23,6 +23,7 @@ Deve ser possível identificar quando um registro foi editado, e o registro mais
 4-
 Sua API deverá ter endpoints onde o usuário consiga realizar as seguintes operações de busca, listagem e filtragem, exibindo todos os campos da transação que atender a respectiva operação:
 Obter todos os registros de um ano;
+http://localhost:8000/transacoes/list/?ano=2022
 Obter todos os registros de um mês e ano;
 Obter todos os registros de um dia, mês e ano.
 Obter todos os registros com uma categoria de transação;
