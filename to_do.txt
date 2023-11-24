@@ -14,7 +14,7 @@ Ok -> deletar do banco a antiga???
 Sua API deverá ter um endpoint onde o usuário poderá fornecer uma lista de identificadores que identificam um conjunto de transações a serem removidas:
 A remoção de uma transação acontece através da criação de registros idênticos, com a diferença de que o tipo da transação deverá ser oposta (correção através de estorno);
 
-testar
+ok
 3-
 Sua API deverá ter um endpoint onde o usuário poderá fornecer um conjunto de registros contendo seu identificador junto com valores a serem editados:
 A edição de uma transação acontece primeiro fazendo a remoção do mesmo (pela operação de estorno) e então a criação do novo registro (lançamento retificado);
@@ -40,6 +40,7 @@ Sua API deverá retornar uma mensagem com o apropriado “status code” quando 
 Uma mensagem e status code de erro quando ela não conseguir atender a requisição solicitada (exemplos como, dados enviados no formato errado, acesso a endpoints inexistente ou sem permissão, etc);
 Uma mensagem e status code de sucesso quando ela conseguir atender a solicitação. Caso for uma operação de criação, ela deverá também retornar o valor de identificador dos registros que foram criados.
 
+ok
 6-
 Para usar os endpoints da sua API o usuário deverá estar autenticado através do uso de uma chave de API que deverá ser passada como valor para um header de nome “X-API-Key” da requisição;
 

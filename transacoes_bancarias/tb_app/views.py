@@ -61,6 +61,8 @@ class TransacaoList(generics.ListAPIView):
 
 #get all transacoes
 @api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getTransacoes(request):
     transacoes = Transacao.objects.all()
     serializer = TransacaoSerializer(transacoes, many=True)
@@ -68,6 +70,8 @@ def getTransacoes(request):
 
 #get single transacao
 @api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getTransacao(request, pk):
     transacao = Transacao.objects.get(id=pk)
     serializer = TransacaoSerializer(transacao, many=False)
@@ -75,6 +79,8 @@ def getTransacao(request, pk):
 
 #add transacao
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def addTransacao(request):
     serializer = TransacaoSerializer(data = request.data)
 
@@ -85,6 +91,8 @@ def addTransacao(request):
 
 #update transacao
 @api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def updateTransacao(request, pk):
     transacao = Transacao.objects.get(id=pk)
     serializer = TransacaoSerializer(instance=transacao, data = request.data)
@@ -97,6 +105,8 @@ def updateTransacao(request, pk):
 
 #delete transacao
 @api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def deleteTransacao(request, pk):
     transacao = Transacao.objects.get(id=pk)
     transacao.delete()
@@ -105,6 +115,8 @@ def deleteTransacao(request, pk):
 
 
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def remover_transacoes(request):
     if request.method == 'POST':
         identificadores = request.data.get('identificadores', [])
@@ -142,6 +154,8 @@ def remover_transacoes(request):
 # A edição de uma transação acontece primeiro fazendo a remoção do mesmo (pela operação de estorno) e então a criação do novo registro (lançamento retificado);
 # Deve ser possível identificar quando um registro foi editado, e o registro mais novo deverá armazenar os identificadores dos registros mais antigos;
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def editarTransacoes(request):
     if request.method == 'POST':
         registros_editar = request.data.get('identificadores', [])
