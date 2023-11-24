@@ -20,6 +20,7 @@ Sua API deverá ter um endpoint onde o usuário poderá fornecer um conjunto de 
 A edição de uma transação acontece primeiro fazendo a remoção do mesmo (pela operação de estorno) e então a criação do novo registro (lançamento retificado);
 Deve ser possível identificar quando um registro foi editado, e o registro mais novo deverá armazenar os identificadores dos registros mais antigos;
 
+ok
 4-
 Sua API deverá ter endpoints onde o usuário consiga realizar as seguintes operações de busca, listagem e filtragem, exibindo todos os campos da transação que atender a respectiva operação:
 Obter todos os registros de um ano;
@@ -29,12 +30,19 @@ http://localhost:8000/transacoes/list/?ano=2023&mes=11
 Obter todos os registros de um dia, mês e ano.
 http://localhost:8000/transacoes/list/?ano=2023&mes=11&dia=21
 Obter todos os registros com uma categoria de transação;
+http://localhost:8000/transacoes/list/?categoria=Games
 Obter todos os registros pelo modo da transação;
+http://localhost:8000/transacoes/list/?modo_transacao=dinheiro
 Filtrar apenas registros de entrada, gasto ou ambos;
+http://localhost:8000/transacoes/list/?tipo_transacao=receita
 Filtrar apenas registros maiores que ou menores que um certo valor;
+http://localhost:8000/transacoes/list/?valor_menor_que=99
 Saber se o registro foi removido e apresentar o registro complementar (a transação que faz o estorno do primeiro valor).
+http://localhost:8000/transacoes/list/?removido=true
 Saber se o registro foi editado, e apresentar os valores dos registros antigos.
+http://localhost:8000/transacoes/list/?editado=true
 
+ok
 5-
 Sua API deverá retornar uma mensagem com o apropriado “status code” quando receber uma requisição:
 Uma mensagem e status code de erro quando ela não conseguir atender a requisição solicitada (exemplos como, dados enviados no formato errado, acesso a endpoints inexistente ou sem permissão, etc);
@@ -44,9 +52,11 @@ ok
 6-
 Para usar os endpoints da sua API o usuário deverá estar autenticado através do uso de uma chave de API que deverá ser passada como valor para um header de nome “X-API-Key” da requisição;
 
+ok
 7-
 Sua API deverá aceitar receber valor de corpo das requisições POST somente no formato JSON;
 
+ok
 8-
 Todas as respostas da sua API deverão retornar os dados no formato JSON com o header “Content-Type” com o valor  “application/json”.
 

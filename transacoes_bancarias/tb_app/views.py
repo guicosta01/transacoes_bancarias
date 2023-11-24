@@ -15,6 +15,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import generics
 from .filters import TransacaoFilter
 import django_filters
+from django.db.models import Q
 
 
 #================================ Token ================================
@@ -54,7 +55,6 @@ class TransacaoList(generics.ListAPIView):
     serializer_class = TransacaoSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_class = TransacaoFilter
-
 
 #================================ Filters ================================
 
